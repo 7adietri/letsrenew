@@ -1,0 +1,13 @@
+#!/bin/bash
+
+PATH="/bin:/usr/bin:/usr/local/bin:/sbin:/usr/sbin:/usr/local/sbin"
+DIR="$(dirname $0)"
+LOG="$DIR/hook.log"
+
+{
+echo "### Let's Encrypt pre-hook"
+for script in $DIR/pre-scripts/*; do
+  [ -x $script ] && $script
+done
+echo ""
+} >> $LOG 2>&1

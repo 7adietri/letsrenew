@@ -1,0 +1,24 @@
+#!/bin/bash
+
+PATH="/bin:/usr/bin:/usr/local/bin:/sbin:/usr/sbin:/usr/local/sbin"
+DIR="$(dirname $0)"
+LOG="$DIR/hook.log"
+
+{
+if [ -z "$RENEWED_DOMAINS" ]; then
+  echo "RENEWED_DOMAINS is empty."
+  exit 1
+fi
+if [ -z "$RENEWED_LINEAGE" ]; then
+  echo "RENEWED_LINEAGE is empty."
+  exit 1
+fi
+
+for domain in $RENEWED_DOMAINS; do
+  if [ -x $DIR/renew-scripts/$domain ]; then
+    echo "### Let's Encrypt renew-hook for $domain"
+    $DIR/renew-scripts/$domain
+    echo ""
+  fi
+done
+} >> $LOG 2>&1

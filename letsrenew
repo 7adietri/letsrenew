@@ -1,0 +1,36 @@
+#!/bin/bash
+
+if [ $# -eq 0 ]; then
+  echo "Usage: $(basename $0) [email_address] <certbot_path> [certbot_options]"
+  exit 1
+fi
+if [ ! -x "$1" ]; then
+  EMAIL="$1"
+  shift
+else
+  EMAIL=""
+fi
+if [ -x "$1" ]; then
+  CERTBOT="$1"
+  shift
+else
+  echo "No certbot executable!"
+  exit 1
+fi
+
+DIR=$(dirname $0)
+PRE_HOOK="$DIR/pre-hook"
+RENEW_HOOK="$DIR/renew-hook"
+POST_HOOK="$DIR/post-hook"
+HOOK_LOG="$DIR/hook.log"
+OPTIONS="--agree-tos --non-interactive --text --pre-hook $PRE_HOOK --renew-hook $RENEW_HOOK --post-hook $POST_HOOK"
+
+[ -f $HOOK_LOG ] && rm -f $HOOK_LOG
+OUTPUT=$($CERTBOT renew $OPTIONS $* 2>&1)
+[ -f $HOOK_LOG ] && OUTPUT=$OUTPUT$'\n\n----- hook.log -----\n\n'$(< $HOOK_LOG)
+
+if [ -z "$EMAIL" ]; then
+  echo "$OUTPUT"
+else
+  echo -e "Subject: letsrenew on $(hostname)\n\n$OUTPUT" | sendmail $EMAIL
+fi

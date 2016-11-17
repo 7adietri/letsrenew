@@ -1,0 +1,2 @@
+Executable files in this directory will be run by the renew-hook,
+if they match a domain name that has been renewed.

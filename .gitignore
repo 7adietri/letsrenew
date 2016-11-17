@@ -1,0 +1,8 @@
+post-scripts/**
+!post-scripts/README
+pre-scripts/**
+!pre-scripts/README
+renew-scripts/**
+!renew-scripts/README
+
+hook.log
