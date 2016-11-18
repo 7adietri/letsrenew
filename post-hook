@@ -5,7 +5,7 @@ DIR="$(dirname $0)"
 LOG="$DIR/hook.log"
 
 {
-echo "### Let's Encrypt post-hook"
+echo "### Post-hook"
 for script in $DIR/post-scripts/*; do
   [ -x $script ] && $script
 done

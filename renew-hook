@@ -16,7 +16,7 @@ fi
 
 for domain in $RENEWED_DOMAINS; do
   if [ -x $DIR/renew-scripts/$domain ]; then
-    echo "### Let's Encrypt renew-hook for $domain"
+    echo "### Renew-hook for $domain"
     $DIR/renew-scripts/$domain
     echo ""
   fi
