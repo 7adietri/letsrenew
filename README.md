@@ -21,7 +21,8 @@ With `letsrenew` installed in `/opt/letsrenew` and Certbot installed in
 
 The Certbot executable may be followed by additional Certbot options.
 
-The output of all scripts will be mailed to `foo@example.com` using `sendmail`.
+When at least one certificate was renewed or an error occurred, the output of
+all scripts will be mailed to `foo@example.com` using `sendmail`.
 If you leave out the email address, the output will be printed on the console.
 
 Hook scripts
