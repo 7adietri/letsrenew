@@ -29,10 +29,13 @@ OPTIONS="--agree-tos --non-interactive --text --pre-hook $PRE_HOOK --renew-hook 
 
 [ -f $HOOK_LOG ] && rm -f $HOOK_LOG
 OUTPUT=$($CERTBOT renew $OPTIONS $* 2>&1)
+STATUS=$?
 [ -f $HOOK_LOG ] && OUTPUT=$OUTPUT$'\n\n----- hook.log -----\n\n'$(< $HOOK_LOG)
 
-if [ -z "$EMAIL" ]; then
-  echo "$OUTPUT"
-else
-  echo -e "Subject: letsrenew on $(hostname)\n\n$OUTPUT" | sendmail $EMAIL
+if [ $STATUS -ne 0 -o -f $HOOK_LOG ]; then
+  if [ -z "$EMAIL" ]; then
+    echo "$OUTPUT"
+  else
+    echo -e "Subject: letsrenew on $(hostname)\n\n$OUTPUT" | sendmail $EMAIL
+  fi
 fi
